@@ -1,7 +1,7 @@
 #[macro_export]
 macro_rules! guarded_unwrap {
     (@inner $expr:expr, $none_case:expr) => {
-        match $expr {
+        match guarded_unwrap::GuardedUnwrap::guarded_unwrap_inner($expr) {
             Some(value) => value,
             None => $none_case,
         }
@@ -30,4 +30,23 @@ macro_rules! guarded_unwrap {
     ($expr:expr, continue) => {
         guarded_unwrap!(@inner $expr, { continue; })
     };
+}
+
+pub trait GuardedUnwrap<T> {
+    fn guarded_unwrap_inner(self) -> Option<T>;
+}
+
+impl<T> GuardedUnwrap<T> for Option<T> {
+    fn guarded_unwrap_inner(self) -> Option<T> {
+        self
+    }
+}
+
+impl<T, E> GuardedUnwrap<T> for Result<T, E> {
+    fn guarded_unwrap_inner(self) -> Option<T> {
+        match self {
+            Ok(value) => Some(value),
+            Err(_) => None
+        }
+    }
 }

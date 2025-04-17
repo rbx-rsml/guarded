@@ -1,6 +1,6 @@
 [package]
 name = "guarded"
-version = "0.0.0"
+version = "0.0.1"
 edition = "2021"
 description = "Guard macros"
 repository = "https://github.com/rbx-rsml/guarded"
